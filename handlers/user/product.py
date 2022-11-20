@@ -3,7 +3,7 @@ import typing
 from aiogram.dispatcher.storage import FSMContext
 from aiogram import types
 
-from keyboard import ProductInfo, BuyProduct, inline, reply
+from keyboard import ProductInfo, BuyProduct, inline
 from modules import Settings, FreeKassa, tools
 from database import DataBase, models
 from main import storage
@@ -28,8 +28,9 @@ async def view_products(callback: types.CallbackQuery):
 
     products = db.get_all_data(models.Product, category=callback.data)
 
-    markup = types.InlineKeyboardMarkup(1)
+    markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton('Назад', callback_data='category'))
+    markup.inline_keyboard.append([])
 
 
     if not products:
@@ -46,14 +47,15 @@ async def view_product(callback: types.CallbackQuery, callback_data: dict):
 
     product = db.get_data(models.Product, id=callback_data.get('id'))
 
+    number = tools.file_counter(product.category, product.id)
+
     markup = types.InlineKeyboardMarkup(1)
     item1 = types.InlineKeyboardButton('Купить', callback_data=BuyProduct.new(product.id))
     item2 = types.InlineKeyboardButton('Назад', callback_data=product.category)
-    markup.add(item1, item2)
+    markup.add(*(item1, item2) if number > 0 else (item2,))
 
 
     if product.category in ('telegram', 'instagram', 'account'):
-        number = tools.file_counter(product.category, product.id)
         msg = texts.product_info_v1.format(product.name, product.price, number, product.description)
     else:
         msg = texts.product_info_v2.format(product.name, product.price, product.description)
@@ -86,8 +88,8 @@ async def buy_product(callback: types.CallbackQuery, callback_data: dict):
         msg = texts.order.format(order_id, product.category, 1, product.price, product.price)
         return await callback.message.answer(msg, reply_markup=markup)
 
-    await callback.message.answer(texts.enter_quantity, reply_markup=reply.cancel)
     await storage.update_data(user=user_id, product_id=product_id)
+    await callback.message.answer(texts.enter_quantity)
     await states.BuyProduct.number.set()
 
 async def number_product(message: types.Message, state: FSMContext):

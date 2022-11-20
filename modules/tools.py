@@ -10,6 +10,9 @@ PRODUCT_PATH = os.path.join(os.path.split(os.path.abspath('.'))[0], 'storage', '
 
 
 def file_counter(category: str, prodict_id: str) -> int:
+    if category in ('program', 'data', 'service'):
+        return 1
+
     return len(glob.glob(os.path.join(
         PRODUCT_PATH, category, str(prodict_id), '*.txt'
     )))
