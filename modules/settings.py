@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     ShopId: str
     ApiKey: str
 
+    Admin: int
+
     class Config:
         env_file = 'static/config.cfg'
         env_file_encoding = 'utf-8'

@@ -7,14 +7,6 @@ from sqlalchemy import func
 from . import base
 
 
-class User(base.BaseModel):
-
-    __tablename__ = 'users'
-
-    id: base.Integer = Column(types.BigInteger, nullable=False, primary_key=True, unique=True)
-    username: base.String = Column(types.String, nullable=False)
-    role: base.String = Column(types.String, default='user')
-
 class Product(base.BaseModel):
 
     __tablename__ = 'products'
