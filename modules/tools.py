@@ -6,7 +6,7 @@ import os
 import re
 
 
-PRODUCT_PATH = os.path.join(os.path.abspath('.'), 'static', 'products')
+PRODUCT_PATH = os.path.join(os.path.split(os.path.abspath('.'))[0], 'storage', 'products')
 
 
 def file_counter(category: str, prodict_id: str) -> int:

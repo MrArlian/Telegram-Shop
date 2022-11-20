@@ -19,7 +19,7 @@ from . import wrappers
 from .. import states
 
 
-PRODUCT_PATH = os.path.join(os.path.abspath('.'), 'static', 'products')
+PRODUCT_PATH = os.path.join(os.path.split(os.path.abspath('.'))[0], 'storage', 'products')
 
 db = DataBase(Settings.DatabaseUrl)
 
