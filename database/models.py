@@ -29,4 +29,5 @@ class Transaction(base.BaseModel):
     product_id: base.Integer = Column(types.Integer, nullable=True)
     tmp_path: base.String = Column(types.String, default='')
     deta: base.DateTime = Column(types.DateTime, default=func.now())
+    platform: base.String = Column(types.String, default='telegram')
     status: base.String = Column(types.String, default='wait')

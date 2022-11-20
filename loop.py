@@ -21,6 +21,7 @@ async def task() -> None:
             table=models.Transaction,
             conditions=[
                 func.now() - models.Transaction.deta >= '10 minutes',
+                models.Transaction.platform == 'telegram',
                 models.Transaction.status == 'wait'
             ]
         )
