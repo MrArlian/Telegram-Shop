@@ -21,7 +21,6 @@ dispatcher.register_callback_query_handler(product.view_product, callbacks.Produ
 
 dispatcher.register_callback_query_handler(product.buy_product, callbacks.BuyProduct.filter())
 dispatcher.register_message_handler(product.number_product, state=states.BuyProduct.number)
-#dispatcher.register_callback_query_handler(product.check_payment, Text('check'))
 
 dispatcher.register_message_handler(faq.faq, Text('💡 правила', ignore_case=True))
 dispatcher.register_message_handler(faq.partners, Text('🤝 наши партнеры', ignore_case=True))
