@@ -28,7 +28,7 @@ async def view_products(callback: types.CallbackQuery):
 
     products = db.get_all_data(models.Product, category=callback.data)
 
-    markup = types.InlineKeyboardMarkup()
+    markup = types.InlineKeyboardMarkup(2)
     markup.add(types.InlineKeyboardButton('Назад', callback_data='category'))
     markup.inline_keyboard.append([])
 
@@ -41,7 +41,11 @@ async def view_products(callback: types.CallbackQuery):
             text=product.name, callback_data=ProductInfo.new(product.id)
         ))
 
-    await callback.message.edit_text(texts.choose_product, reply_markup=markup)
+    if callback.message.photo:
+        await callback.message.delete()
+        await callback.message.answer(texts.choose_product, reply_markup=markup)
+    else:
+        await callback.message.edit_text(texts.choose_product, reply_markup=markup)
 
 async def view_product(callback: types.CallbackQuery, callback_data: dict):
 
@@ -60,8 +64,9 @@ async def view_product(callback: types.CallbackQuery, callback_data: dict):
     else:
         msg = texts.product_info_v2.format(product.name, product.price, product.description)
 
-    if product.media:
-        await callback.message.answer_photo(msg, reply_markup=markup)
+    if product.media_link:
+        file = types.InputFile(product.media_link)
+        await callback.message.answer_photo(file, msg, reply_markup=markup)
         return await callback.message.delete()
 
     await callback.message.edit_text(msg, reply_markup=markup)

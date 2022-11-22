@@ -59,43 +59,52 @@ async def add_product_info(message: types.Message, state: FSMContext):
 @wrappers.back_admin_menu
 async def add_product_photo(message: types.Message, state: FSMContext):
 
+    photo = message.photo
+
     data = await state.get_data()
     category = data.get('category')
     args = data.get('args')
 
+    product_id = random.randint(9999, 999999999)
+    path = os.path.join(PRODUCT_PATH, category, str(product_id))
 
-    if message.text.lower() != 'пропустить':
-        photo = message.photo[0].file_id
+
+    if photo:
+        media_link = os.path.join(path, 'picture.jpg')
     else:
-        photo = ''
+        media_link = ''
+
+    if media_link:
+        file = await bot.get_file(photo[-1].file_id)
+        await bot.download_file(file.file_path, media_link)
 
     if category == 'service':
         db.add(
             table=models.Product,
+            id=product_id,
             name=args[0],
             price=args[1],
             category=category,
             description=args[2],
-            media=photo
+            media_link=media_link
         )
         await message.answer(texts.product_added.format(args[0]), reply_markup=reply.admin_menu)
         return await state.finish()
 
-    await message.answer(texts.add_zip_file, reply_markup=reply.cancel)
-    await state.update_data(photo=photo)
+    await message.answer(texts.add_zip_file, reply_markup=reply.remove)
+    await state.update_data(product_id=product_id, media=media_link)
     await states.AddProduct.next()
 
-@wrappers.back_admin_menu
 async def add_product_data(message: types.Message, state: FSMContext):
 
     document = message.document
 
     data = await state.get_data()
+    product_id = data.get('product_id')
     category = data.get('category')
-    photo = data.get('photo')
+    media_link = data.get('media')
     args = data.get('args')
 
-    product_id = random.randint(9999, 999999999)
     path = os.path.join(PRODUCT_PATH, category, str(product_id))
 
 
@@ -117,7 +126,7 @@ async def add_product_data(message: types.Message, state: FSMContext):
         price=args[1],
         category=category,
         description=args[2],
-        media=photo,
+        media_link=media_link,
         file_link=path
     )
     await message.answer(texts.product_added.format(args[0]), reply_markup=reply.admin_menu)

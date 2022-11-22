@@ -1,5 +1,7 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
 
+
+remove = ReplyKeyboardRemove()
 
 #User
 main_menu = ReplyKeyboardMarkup(

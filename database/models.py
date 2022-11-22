@@ -1,5 +1,3 @@
-from random import randint
-
 from sqlalchemy.schema import Column
 from sqlalchemy import types
 from sqlalchemy import func
@@ -11,12 +9,12 @@ class Product(base.BaseModel):
 
     __tablename__ = 'products'
 
-    id: base.Integer = Column(types.BigInteger, default=randint(9999, 999999999), primary_key=True)
+    id: base.Integer = Column(types.BigInteger, nullable=False, primary_key=True)
     name: base.String = Column(types.String, nullable=False)
     price: base.Float = Column(types.Float, nullable=False)
     category: base.String = Column(types.String, nullable=False)
     description: base.String = Column(types.String, default='')
-    media: base.String = Column(types.String, default='')
+    media_link: base.String = Column(types.String, default='')
     file_link: base.String = Column(types.String, default='')
 
 
