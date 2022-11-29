@@ -69,7 +69,7 @@ class DataBase:
                      conditions: typing.Iterable = None,
                      distinct: typing.Iterable = None,
                      default: base.Default = None,
-                     **kwargs) -> typing.Union[list[base.Table], base.Default]:
+                     **kwargs) -> typing.Union[typing.List[base.Table], base.Default]:
         """
             Get records from database.
 
