@@ -1,4 +1,5 @@
 import typing
+import time
 
 from aiogram.dispatcher.storage import FSMContext
 from aiogram import types
@@ -13,7 +14,7 @@ import texts
 from .. import states
 
 
-kassa = FreeKassa(Settings.ApiKey, Settings.ShopId)
+kassa = FreeKassa(Settings.ApiKey, Settings.ShopId, Settings.Secret)
 db = DataBase(Settings.DatabaseUrl)
 
 
@@ -77,16 +78,16 @@ async def buy_product(callback: types.CallbackQuery, callback_data: dict):
     user_id = callback.from_user.id
 
     product = db.get_data(models.Product, id=product_id)
+    order_id = int(time.time())
 
     await callback.message.delete_reply_markup()
 
 
     if product.category in ('program', 'data', 'service'):
-        order = kassa.create_order(product.price, 0)
-        order_id = order.get('orderId')
+        url = kassa.generate_payment_url(product.price, order_id)
 
         markup = types.InlineKeyboardMarkup()
-        markup.add(types.InlineKeyboardButton('Оплатить FreeKassa', url=order.get('location')))
+        markup.add(types.InlineKeyboardButton('Оплатить FreeKassa', url=url))
 
         db.add(models.Transaction, id=order_id, user_id=user_id, product_id=product.id)
 
@@ -117,13 +118,13 @@ async def number_product(message: types.Message, state: FSMContext):
             return await message.answer(texts.minimum_input)
 
         total_price = product.price * number
+        order_id = int(time.time())
 
         tmp_dir = tools.move_tmp_dir(product.category, product_id, number, user_id)
-        order = kassa.create_order(total_price, 0)
-        order_id = order.get('orderId')
+        url = kassa.generate_payment_url(total_price, order_id)
 
         markup = types.InlineKeyboardMarkup()
-        markup.add(types.InlineKeyboardButton('Оплатить FreeKassa', url=order.get('location')))
+        markup.add(types.InlineKeyboardButton('Оплатить FreeKassa', url=url))
 
         db.add(
             table=models.Transaction,

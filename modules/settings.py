@@ -1,3 +1,5 @@
+import os
+
 from pydantic import BaseSettings
 
 
@@ -12,11 +14,12 @@ class Settings(BaseSettings):
 
     ShopId: str
     ApiKey: str
+    Secret: str
 
     Admin: int
 
     class Config:
-        env_file = 'static/config.cfg'
+        env_file = os.path.join(os.path.abspath('.'), 'static', 'config.cfg')
         env_file_encoding = 'utf-8'
 
 settings = Settings()
