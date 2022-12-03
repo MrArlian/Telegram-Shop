@@ -1,11 +1,10 @@
 import random
 import io
 import os
+import re
 
 from aiogram.dispatcher.storage import FSMContext
 from aiogram import types
-
-from boltons import strutils
 
 from database import DataBase, models
 from modules import Settings, tools
@@ -44,7 +43,7 @@ async def add_product_category(message: types.Message, state: FSMContext):
 @wrappers.back_admin_menu
 async def add_product_info(message: types.Message, state: FSMContext):
 
-    args = strutils.split_punct_ws(message.text)[:3]
+    args = re.split(r'\s*[,]\s*', message.text)[:3]
 
 
     if len(args) < 3:
