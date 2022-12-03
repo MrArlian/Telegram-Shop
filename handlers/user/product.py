@@ -89,8 +89,13 @@ async def buy_product(callback: types.CallbackQuery, callback_data: dict):
         markup = types.InlineKeyboardMarkup()
         markup.add(types.InlineKeyboardButton('Оплатить FreeKassa', url=url))
 
-        db.add(models.Transaction, id=order_id, user_id=user_id, product_id=product.id)
-
+        db.add(
+            table=models.Transaction,
+            id=order_id,
+            user_id=user_id,
+            product_id=product.id,
+            path=product.file_link
+        )
         msg = texts.order.format(order_id, product.category, 1, product.price, product.price)
         return await callback.message.answer(msg, reply_markup=markup)
 
@@ -131,7 +136,7 @@ async def number_product(message: types.Message, state: FSMContext):
             id=order_id,
             user_id=user_id,
             product_id=product_id,
-            tmp_path=tmp_dir
+            path=tmp_dir
         )
         msg = texts.order.format(order_id, product.category, number, product.price, total_price)
         await message.answer(msg, reply_markup=markup)

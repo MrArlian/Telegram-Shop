@@ -53,14 +53,20 @@ def extract(obj: io.BytesIO, save_path: str) -> None:
     with zipfile.ZipFile(obj) as file:
         file.extractall(save_path)
 
-def archiv(path: str) -> io.BytesIO:
+def archive(path: str) -> io.BytesIO:
     buf = io.BytesIO()
 
-    with zipfile.ZipFile(buf, 'w') as file:
-        for file_name in os.listdir(path):
-            file.write(os.path.join(path, file_name), file_name)
+    if os.path.isfile(path):
+        with open(path, 'rb') as file:
+            buf.write(file.read())
 
-    shutil.rmtree(path, ignore_errors=True)
+    elif os.path.isdir(path):
+        with zipfile.ZipFile(buf, 'w') as file:
+            for file_name in os.listdir(path):
+                file.write(os.path.join(path, file_name), file_name)
+
+        shutil.rmtree(path, ignore_errors=True)
+
     return buf
 
 def save_archive(obj: io.BytesIO, file_name: str, save_path: str) -> None:

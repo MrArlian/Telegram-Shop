@@ -20,7 +20,7 @@ async def task() -> None:
         transactions = db.get_all_data(
             table=models.Transaction,
             conditions=[
-                func.now() - models.Transaction.deta >= '10 minutes',
+                func.now() - models.Transaction.date >= '10 minutes',
                 models.Transaction.platform == 'telegram',
                 models.Transaction.status == 'wait'
             ]

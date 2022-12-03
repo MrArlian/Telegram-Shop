@@ -118,6 +118,7 @@ async def add_product_data(message: types.Message, state: FSMContext):
         tools.extract(buf, path)
     elif category in ('program', 'base'):
         tools.save_archive(buf, document.file_name, path)
+        path = os.path.join(path, document.file_name)
 
     db.add(
         table=models.Product,
