@@ -1,6 +1,23 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
+abount_menu = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton('Отзывы', url='https://t.me/+canmsEFxSa04MmE6')
+        ],
+        [
+            InlineKeyboardButton('Кейсы и портфолио', url='https://t.me/+LE9KjNf35OFlMDYy')
+        ],
+        [
+            InlineKeyboardButton('Наши услуги', url='https://t.me/c/1681438125/3')
+        ],
+        [
+            InlineKeyboardButton('Связь со мной', url='https://t.me/marketingdream')
+        ]
+    ]
+)
+
 category_menu = InlineKeyboardMarkup(
     inline_keyboard=[
         [

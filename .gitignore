@@ -6,3 +6,4 @@ static/*.cfg
 
 #Ignore other files
 static/*.tar
+static/*.jpg
