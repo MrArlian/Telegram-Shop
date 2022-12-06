@@ -3,10 +3,15 @@ import os
 
 from aiogram import types, exceptions
 
-from main import bot
+from database import DataBase, models
+from modules import Settings
 from keyboard import inline
+from main import bot
 
 import texts
+
+
+db = DataBase(Settings.DatabaseUrl)
 
 
 async def user_join(event: typing.Union[types.Message, types.ChatJoinRequest]):
@@ -23,4 +28,6 @@ async def user_join(event: typing.Union[types.Message, types.ChatJoinRequest]):
             reply_markup=inline.abount_menu
         )
     except (exceptions.CantTalkWithBots, exceptions.CantInitiateConversation):
-        pass
+        return
+
+    db.add(models.User, 'id', id=event.from_user.id)

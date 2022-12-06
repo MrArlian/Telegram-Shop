@@ -15,14 +15,15 @@ dispatcher = Dispatcher(bot, storage=storage)
 def main() -> None:
     from handlers.middleware import CheckAdminRole
     from handlers import dispatcher as dp
-    from loop import task
+    from loop import task_1, task_2
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
     dp.setup_middleware(CheckAdminRole())
 
-    loop.create_task(task())
+    loop.create_task(task_1())
+    loop.create_task(task_2())
 
     try:
         executor.start_polling(dp, loop=loop)

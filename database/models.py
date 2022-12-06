@@ -5,6 +5,13 @@ from sqlalchemy import func
 from . import base
 
 
+class User(base.BaseModel):
+
+    __tablename__ = 'users'
+
+    id: base.Integer = Column(types.BigInteger, nullable=False, primary_key=True)
+    role: base.String = Column(types.String, default='user')
+
 class Product(base.BaseModel):
 
     __tablename__ = 'products'
