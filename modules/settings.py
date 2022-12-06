@@ -16,8 +16,6 @@ class Settings(BaseSettings):
     ApiKey: str
     Secret: str
 
-    Admin: int
-
     class Config:
         env_file = os.path.join(os.path.abspath('.'), 'static', 'config.cfg')
         env_file_encoding = 'utf-8'
