@@ -16,7 +16,7 @@ class CheckAdminRole(BaseMiddleware):
     """
 
     async def on_process_message(self, message: types.Message, *_) -> None:
-        if message.text.lower() in ('/admin', 'добавить товар'):
+        if (message.text or message.caption or '').lower() in ('/admin', 'добавить товар'):
             await self._check(message.chat.id)
 
     async def _check(self, user_id: int) -> None:
